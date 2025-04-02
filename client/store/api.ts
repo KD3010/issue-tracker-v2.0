@@ -19,8 +19,8 @@ export interface User {
 
 export interface Attachment {
     id: number,
-    fileUrl: string,
-    filename: string,
+    fileURL: string,
+    fileName: string,
     taskId: number,
     uploadedById: number
 }
@@ -61,12 +61,16 @@ export enum Priority {
 }
 
 export const api = createApi({
-    baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_BASE_QUERY }),
+    baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL }),
     reducerPath: "api",
     tagTypes: ["Projects", "Tasks"],
     endpoints: (build) => ({
         getAllProjects: build.query<Project[], void>({
             query: () => "projects",
+            providesTags: ["Projects"]
+        }),
+        getProjectDetails: build.query<Project, { id: number }>({
+            query: ({ id }) => `/projects/${id}`,
             providesTags: ["Projects"]
         }),
         createProject: build.mutation<Project, Partial<Project>>({
@@ -104,6 +108,7 @@ export const api = createApi({
 
 export const { 
     useGetAllProjectsQuery, 
+    useGetProjectDetailsQuery,
     useCreateProjectMutation, 
     useGetAllTasksQuery, 
     useCreateTaskMutation, 

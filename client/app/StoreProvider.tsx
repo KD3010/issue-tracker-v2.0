@@ -1,14 +1,19 @@
 "use client";
 import React, { useRef, type ReactNode } from 'react'
-import { configureStore } from '@reduxjs/toolkit'
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { useDispatch, useSelector, useStore, Provider } from 'react-redux'
 import globalReducer from '@/store'
+import { api } from '@/store/api';
+
+const rootReducer = combineReducers({
+  globalReducer,
+  [api.reducerPath]: api.reducer
+});
 
 export const makeStore = () => {
   return configureStore({
-    reducer: {
-        globalReducer,
-    },
+    reducer: rootReducer,
+    middleware: (defaultMiddleware) => defaultMiddleware().concat(api.middleware),
   })
 }
 

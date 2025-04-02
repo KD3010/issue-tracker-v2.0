@@ -1,6 +1,7 @@
 "use client";
 import { useAppDispatch, useAppSelector } from '@/app/StoreProvider';
 import { setIsSidebarCollapsed } from '@/store';
+import { useGetAllProjectsQuery } from '@/store/api';
 import { AlertCircle, AlertOctagon, AlertTriangle, Briefcase, ChevronDown, HomeIcon, Layers3, LockIcon, Search, Settings, ShieldAlert, User, Users, X, type LucideIcon } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -27,6 +28,8 @@ const PriorityLinksArr = [
 const Sidebar = () => {
     const dispatch = useAppDispatch();
     const { isSidebarCollapsed } = useAppSelector((state) => state.globalReducer);
+
+    const { data: projects } = useGetAllProjectsQuery();
 
     const [showProjects, setShowProjects] = useState<boolean>(false)
     const [showPriority, setShowPriority] = useState<boolean>(false)
@@ -63,7 +66,7 @@ const Sidebar = () => {
             </div>
 
             {/* NAVBAR LINKS */}
-            <nav className='z-10 w-full'>
+            <nav className='z-10 w-full overflow-x-hidden'>
                 {SidebarLinksArr.map((link, ind) => <SidebarLink key={ind} icon={link.icon} label={link.label} href={link.href}/>)}
                 {/* PROJECTS LINKS */}
                 <button 
@@ -73,7 +76,9 @@ const Sidebar = () => {
                     <span className=''>Projects</span>
                     <ChevronDown className={`h-5 w-5 transform-all duration-100 ${showProjects ? "-rotate-180" : "rotate-0"}`}/>
                 </button>
-                
+                {showProjects ? (
+                    projects?.map((project) => <SidebarLink key={project.id} icon={Briefcase} label={project.name} href={`/projects/${project.id}`}/>)
+                ) : null}
 
                 {/* PRIORITY LINKS */}
                 <button 

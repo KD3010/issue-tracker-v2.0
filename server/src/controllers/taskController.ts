@@ -16,10 +16,7 @@ export const getAllTasks = async (req: Request, res: Response): Promise<void> =>
             }
         });
 
-        res.status(200).json({
-            tasks,
-            total: tasks.length
-        })
+        res.status(200).json(tasks)
     } catch (error: any) {
         res.status(500).json({
             message: `Error retreiving the tasks: \n ${error.message}`
@@ -43,7 +40,7 @@ export const createTask = async (req: Request, res: Response): Promise<void> => 
             assignedUserId 
         } = req.body;
 
-        const task = await prisma.task.create({
+        const newTask = await prisma.task.create({
             data: {
                 title, 
                 description, 
@@ -59,9 +56,7 @@ export const createTask = async (req: Request, res: Response): Promise<void> => 
             }
         })
 
-        res.status(201).json({
-            task
-        })
+        res.status(201).json(newTask)
     } catch (error: any) {
         res.status(500).json({
             message: `Error creating the task: \n ${error.message}`
@@ -74,7 +69,7 @@ export const updateTaskStatus = async (req: Request, res: Response): Promise<voi
         const { taskId } = req.params;
         const { status } = req.body;
 
-        const tasks = await prisma.task.update({
+        const updatedTask = await prisma.task.update({
             where: {
                 id: Number(taskId),
             },
@@ -83,9 +78,7 @@ export const updateTaskStatus = async (req: Request, res: Response): Promise<voi
             }
         });
 
-        res.status(200).json({
-            tasks,
-        })
+        res.status(200).json(updatedTask)
     } catch (error: any) {
         console.log(error)
         res.status(500).json({
