@@ -10,7 +10,7 @@ import React, { useState } from 'react';
 
 const SidebarLinksArr = [
     { icon: HomeIcon, label: "Home", href: "/" },
-    { icon: Briefcase, label: "Timeline", href: "/timeline" },
+    { icon: Briefcase, label: "Project Timeline", href: "/timeline" },
     { icon: Search, label: "Search", href: "/search" },
     { icon: Settings, label: "Settings", href: "/settings" },
     { icon: User, label: "Users", href: "/users" },
@@ -27,7 +27,7 @@ const PriorityLinksArr = [
 
 const Sidebar = () => {
     const dispatch = useAppDispatch();
-    const { isSidebarCollapsed } = useAppSelector((state) => state.globalReducer);
+    const { isSidebarCollapsed } = useAppSelector((state) => state.global);
 
     const { data: projects } = useGetAllProjectsQuery();
 
@@ -44,7 +44,7 @@ const Sidebar = () => {
             {/* TOP LOGO */}
             <div className="z-50 flex min-h-[56px] w-64 items-center justify-between bg-white px-6 pt-3 dark:bg-black">
                 <div className='text-xl font-bold text-gray-800 dark:text-white'>
-                    PRO PLAN
+                    Issue Tracker 2.0
                 </div>
                 {isSidebarCollapsed ? null : (
                     <button className='py-3' onClick={() => dispatch(setIsSidebarCollapsed(!isSidebarCollapsed))}>

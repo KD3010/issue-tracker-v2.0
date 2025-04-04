@@ -1,20 +1,19 @@
 import { useGetAllTasksQuery, useUpdateTaskStatusMutation } from '@/store/api';
-import React, { type Dispatch, type SetStateAction } from 'react'
+import React, { useState, type Dispatch, type SetStateAction } from 'react'
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { type Task } from '@/store/api';
-import { EllipsisVertical, LoaderCircle, MessageSquareMore, Plus } from 'lucide-react';
+import { EllipsisVertical, LoaderCircle, MessageSquareMore, AlertCircle, ShieldAlert, AlertTriangle, AlertOctagon, Layers3 } from 'lucide-react';
 import { format } from "date-fns";
 import Image from 'next/image';
 
 type BoardProps = {
     id: string,
-    setIsNewTaskModalOpen: Dispatch<SetStateAction<boolean>>,
 }
 
 const taskStatus = ["To Do", "In Progress", "Under Review", "Closed"];
 
-const BoardView = ({id, setIsNewTaskModalOpen}: BoardProps) => {
+const BoardView = ({ id }: BoardProps) => {
     const { data:  tasks, isLoading, error } = useGetAllTasksQuery({ projectId: Number(id) });
     const [updateTaskStatus] = useUpdateTaskStatusMutation();
 
@@ -36,7 +35,7 @@ const BoardView = ({id, setIsNewTaskModalOpen}: BoardProps) => {
     <DndProvider backend={HTML5Backend}>
         <div className='grid grid-cols-1 gap-4 p-4 md:grid-cols-2 xl:grid-cols-4'>
             {taskStatus.map((status) => (
-                <TaskColumn key={status} status={status} tasks={tasks || []} moveTask={moveTask} setIsNewTaskModalOpen={setIsNewTaskModalOpen}/>
+                <TaskColumn key={status} status={status} tasks={tasks || []} moveTask={moveTask} />
             ))}
         </div>
     </DndProvider>
@@ -47,10 +46,9 @@ type TaskColumnProps = {
     status: string,
     tasks: Task[],
     moveTask: (taskId: number, toStatus: string) => void,
-    setIsNewTaskModalOpen: Dispatch<SetStateAction<boolean>>
 }
 
-const TaskColumn = ({status, tasks, moveTask, setIsNewTaskModalOpen}: TaskColumnProps) => {
+const TaskColumn = ({status, tasks, moveTask, }: TaskColumnProps) => {
     const [ { isOver }, drop ] = useDrop(() => ({
         accept: "task",
         drop: (item: { id: number }) => moveTask(item.id, status),
@@ -85,16 +83,16 @@ const TaskColumn = ({status, tasks, moveTask, setIsNewTaskModalOpen}: TaskColumn
                         </span>
                     </h3>
 
-                    <div className='flex items-center gap-1'>
+                    {/* <div className='flex items-center gap-1'>
                         <button className='flex h-6 w-5 items-center justify-center dark:text-neutral-500'>
                             <EllipsisVertical size={26} />
                         </button>
                         <button className='flex h-6 w-6 items-center justify-center rounded bg-gray-200 dark:bg-dark-tertiary dark:text-white'
-                            onClick={() => setIsNewTaskModalOpen(true)}
+                            onClick={() => (true)}
                         >
                             <Plus size={16}/>
                         </button>
-                    </div>
+                    </div> */}
                 </div>
             </div>
 
@@ -113,6 +111,8 @@ const Task = ({ task }: { task: Task }) => {
                 isDragging: !!monitor.isDragging()
         })
     }));
+    const [showAuthorUsername, setShowAuthorUsername] = useState<boolean>(false)
+    const [showAssigneeUsername, setShowAssigneeUsername] = useState<boolean>(false)
 
     const taskTagsSplit = task.tags ? task.tags.split(",") : [];
     const formattedStartDate = task.startDate ? format(new Date(task.startDate), "P") : "" 
@@ -120,7 +120,7 @@ const Task = ({ task }: { task: Task }) => {
     const numberOfComments = (task.comments && task.comments.length) || 0;
     const PriorityTag = ({ priority } : { priority: Task["priority"] }) => (
         <div 
-            className={`rounded-full px-2 py-1 text-xs font-semibold ${
+            className={`rounded-full px-2 py-1 text-xs font-semibold flex flex-nowrap gap-1 ${
                 priority === "Blocker" ? 
                 "bg-red-200 text-red-700" : priority === "Critical" ?
                 "bg-yellow-200 text-yellow-700" : priority === "Major" ? 
@@ -129,6 +129,14 @@ const Task = ({ task }: { task: Task }) => {
                 "bg-gray-200 text-gray-700"
             }`}
         >
+            {
+                priority === "Blocker" ? 
+                <AlertCircle className='h-4 w-4'/> : priority === "Critical" ?
+                <ShieldAlert className='h-4 w-4'/> : priority === "Major" ? 
+                <AlertTriangle className='h-4 w-4'/> : priority === "Minor" ?
+                <AlertOctagon className='h-4 w-4'/> : 
+                <Layers3 className='h-4 w-4'/>
+            } {" "}
             {priority}
         </div>
     )
@@ -141,7 +149,7 @@ const Task = ({ task }: { task: Task }) => {
                 isDragging ? "opacity-50" : "opacity-100"
             }`}
         >
-            {task.attachments && task.attachments.length > 0 && (
+            {/* {task.attachments && task.attachments.length > 0 && (
                 <Image 
                     src={`/${task.attachments[0].fileURL}`} 
                     alt={task.attachments[0].fileName}
@@ -150,23 +158,25 @@ const Task = ({ task }: { task: Task }) => {
                     className='h-auto w-full rounded-t-md'
                 />
 
-            )}
+            )} */}
             <div className='p-4 md:p-6'>
                 <div className="flex items-center justify-between">
                     <div className="flex flex-1 wrap items-center gap-2">
-                        {task.priority && <PriorityTag priority={task.priority} />}
-                        <div className="flex gap-2">
-                            {taskTagsSplit.map(tag => (
-                                <div key={tag} className='rounded-full bg-blue-100 px-2 py-1 text-xs text-center'>
-                                    {" "}{tag}
-                                </div>
-                            ))}
-                        </div>
+                        {task.priority && <PriorityTag priority={task.priority} />}    
                     </div>
-
                     <button className="flex h-6 w-4 flex-shrink-0 items-center justify-center dark:text-neutral-500">
                         <EllipsisVertical size={26}/>
                     </button>
+                </div>
+
+                <div className='mt-3'>
+                    <div className="flex gap-1">
+                        {taskTagsSplit.map(tag => (
+                            <div key={tag} className='rounded-full bg-blue-100 px-2 py-1 text-xs text-center'>
+                                {" "}{tag}
+                            </div>
+                        ))}
+                    </div>
                 </div>
 
                 <div className='my-3 flex justify-between'>
@@ -183,33 +193,51 @@ const Task = ({ task }: { task: Task }) => {
                     {formattedDueDate  && <span>{formattedDueDate}</span>}
                 </div>
 
-                <p className='text-sm text-gray-600 dark:text-neutral-500'>
+                <p className='text-sm text-gray-600 dark:text-neutral-500 truncate'>
                     {task.description}
                 </p>
 
                 <div className='mt-4 border-t border-gray-200 dark:border-stroke-dark' />
 
                 <div className='mt-3 flex items-center justify-between'>
-                    <div className="flex -space-x-[8px] overflow-hidden">
-                        {task.assignee && (
-                            <Image 
-                                key={task.assignee.userId}
-                                src={`/${task.assignee.profilePictureUrl}`}
-                                alt={task.assignee.username}
-                                width={30}
-                                height={30}
-                                className='h-8 w-8 rounded-full border-2 border-white object-cover dark:border-dark-secondary'
-                            />
-                        )}
+                    <div className="flex -space-x-[4px]">
                         {task.author && (
-                            <Image 
-                                key={task.author.userId}
-                                src={`/${task.author.profilePictureUrl}`}
-                                alt={task.author.username}
-                                width={30}
-                                height={30}
-                                className='h-8 w-8 rounded-full border-2 border-white object-cover dark:border-dark-secondary'
-                            />
+                            <div className='relative'>
+                                {showAuthorUsername && (
+                                    <div className='absolute bottom-9 rounded-md px-2 py-1 z-50 -left-[90%] border bg-gray-50 border-gray-200 dark:bg-dark-bg dark:border-gray-800 dark:text-white'>
+                                        {task.author.username}
+                                    </div>
+                                )}
+                                <Image 
+                                    key={task.author.userId}
+                                    src={`/${task.author.profilePictureUrl}`}
+                                    alt={task.author.username}
+                                    width={30}
+                                    height={30}
+                                    onMouseEnter={() => setShowAuthorUsername(true)}
+                                    onMouseLeave={() => setShowAuthorUsername(false)}
+                                    className='h-8 w-8 cursor-pointer rounded-full border-2 border-white object-cover dark:border-dark-secondary hover:scale-105 transition-transform duration-100'
+                                />
+                            </div>
+                        )}
+                        {task.assignee && (
+                            <div className='relative'>
+                                {showAssigneeUsername && (
+                                    <div className='absolute bottom-9 rounded-md px-2 py-1 z-50 -left-[90%] border bg-gray-50 border-gray-200 dark:bg-dark-bg dark:border-gray-800 dark:text-white'>
+                                        {task.assignee.username}
+                                    </div>
+                                )}
+                                <Image 
+                                    key={task.assignee.userId}
+                                    src={`/${task.assignee.profilePictureUrl}`}
+                                    alt={task.assignee.username}
+                                    width={30}
+                                    height={30}
+                                    onMouseEnter={() => setShowAssigneeUsername(true)}
+                                    onMouseLeave={() => setShowAssigneeUsername(false)}
+                                    className='h-8 w-8 cursor-pointer rounded-full border-2 border-white object-cover dark:border-dark-secondary hover:scale-105 transition-transform duration-100'
+                                />
+                            </div>
                         )}
                     </div>
 

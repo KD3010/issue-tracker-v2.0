@@ -15,7 +15,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Pro Plan",
+  title: "Issue Tracker 2.0",
   description: "Plan smarter, collaborate efficiently, and deliver outstanding results.",
 };
 

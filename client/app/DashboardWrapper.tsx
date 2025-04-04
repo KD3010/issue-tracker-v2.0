@@ -5,7 +5,7 @@ import React, { useEffect, type ReactNode } from 'react'
 import StoreProvider, { useAppSelector } from './StoreProvider'
 
 const DashboardLayout = ({ children }: { children: ReactNode }) => {
-  const {isSidebarCollapsed, isDarkMode} = useAppSelector(state => state.globalReducer);
+  const {isSidebarCollapsed, isDarkMode} = useAppSelector(state => state.global);
 
   useEffect(() => {
     if(isDarkMode) {

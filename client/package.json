@@ -25,7 +25,8 @@
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^18",
     "react-redux": "^9.2.0",
-    "recharts": "^2.15.1"
+    "recharts": "^2.15.1",
+    "redux-persist": "^6.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.17.28",
