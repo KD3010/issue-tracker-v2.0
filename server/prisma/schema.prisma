@@ -5,7 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider      = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -20,12 +20,11 @@ model User {
   profilePictureUrl String?
   teamId            Int?
 
-  authoredTasks   Task[]           @relation("TaskAuthor")
-  assignedTasks   Task[]           @relation("TaskAssignee")
-  taskAssignments TaskAssignment[]
-  attachments     Attachment[]
-  comments        Comment[]
-  team            Team?            @relation(fields: [teamId], references: [id])
+  authoredTasks Task[]       @relation("TaskAuthor")
+  assignedTasks Task[]       @relation("TaskAssignee")
+  attachments   Attachment[]
+  comments      Comment[]
+  team          Team?        @relation(fields: [teamId], references: [id])
 }
 
 model Team {
@@ -69,39 +68,32 @@ model Task {
   authorUserId   Int
   assignedUserId Int?
 
-  project         Project          @relation(fields: [projectId], references: [id])
-  author          User             @relation("TaskAuthor", fields: [authorUserId], references: [userId])
-  assignee        User?            @relation("TaskAssignee", fields: [assignedUserId], references: [userId])
-  taskAssignments TaskAssignment[]
-  attachments     Attachment[]
-  comments        Comment[]
-}
-
-model TaskAssignment {
-  id     Int @id @default(autoincrement())
-  userId Int
-  taskId Int
-
-  user User @relation(fields: [userId], references: [userId])
-  task Task @relation(fields: [taskId], references: [id])
+  project     Project      @relation(fields: [projectId], references: [id])
+  author      User         @relation("TaskAuthor", fields: [authorUserId], references: [userId])
+  assignee    User?        @relation("TaskAssignee", fields: [assignedUserId], references: [userId])
+  attachments Attachment[]
+  comments    Comment[]
 }
 
 model Attachment {
   id           Int     @id @default(autoincrement())
   fileURL      String
   fileName     String?
-  taskId       Int
+  taskId       Int?
   uploadedById Int
+  commentId    Int?
 
-  task       Task @relation(fields: [taskId], references: [id])
-  uploadedBy User @relation(fields: [uploadedById], references: [userId])
+  task       Task?    @relation(fields: [taskId], references: [id])
+  uploadedBy User     @relation(fields: [uploadedById], references: [userId])
+  comment    Comment? @relation(fields: [commentId], references: [id])
 }
 
 model Comment {
-  id     Int    @id @default(autoincrement())
-  text   String
-  taskId Int
-  userId Int
+  id          Int          @id @default(autoincrement())
+  text        String
+  taskId      Int
+  userId      Int
+  attachments Attachment[]
 
   task Task @relation(fields: [taskId], references: [id])
   user User @relation(fields: [userId], references: [userId])
