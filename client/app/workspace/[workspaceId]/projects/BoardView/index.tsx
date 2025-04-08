@@ -33,7 +33,7 @@ const BoardView = ({ id }: BoardProps) => {
 
   return (
     <DndProvider backend={HTML5Backend}>
-        <div className='grid grid-cols-1 gap-4 p-4 md:grid-cols-2 xl:grid-cols-4'>
+        <div className='grid grid-cols-1 gap-4 p-4 md:grid-cols-2 xl:grid-cols-4 min-h-[65vh]'>
             {taskStatus.map((status) => (
                 <TaskColumn key={status} status={status} tasks={tasks || []} moveTask={moveTask} />
             ))}
@@ -71,7 +71,7 @@ const TaskColumn = ({status, tasks, moveTask, }: TaskColumnProps) => {
         }}
         className={`sm:py-4 rounded-lg py-2 xl:px-2 ${isOver ? "bg-blue-100 dark:bg-black" : ""}`}
         >
-            <div className='mb-3 flex w-full'>
+            <div className='mb-3 flex w-full shadow'>
                 <div className={`w-2 !bg-[${statusColor[status]}] rounded-s-lg`} style={{ backgroundColor: statusColor[status] }}/>
                 <div className='flex w-full items-center justify-between rounded-e-lg bg-white px-5 py-4 dark:bg-dark-secondary'>
                     <h3 className='flex items-center text-lg  font-semibold dark:text-white'>
@@ -203,11 +203,13 @@ const Task = ({ task }: { task: Task }) => {
                     <div className="flex -space-x-[4px]">
                         {task.author && (
                             <div className='relative'>
+                                {/* Tooltip */}
                                 {showAuthorUsername && (
-                                    <div className='absolute bottom-9 rounded-md px-2 py-1 z-50 -left-[90%] border bg-gray-50 border-gray-200 dark:bg-dark-bg dark:border-gray-800 dark:text-white'>
+                                    <div className='absolute bottom-9 rounded-md px-2 py-1 z-50 left-1/2 transform -translate-x-1/2 whitespace-nowrap border bg-gray-50 border-gray-200 dark:bg-dark-bg dark:border-gray-800 dark:text-white'>
                                         {task.author.username}
                                     </div>
                                 )}
+                                {/* Tooltip Trigger */}
                                 <Image 
                                     key={task.author.userId}
                                     src={`/${task.author.profilePictureUrl}`}
@@ -223,7 +225,7 @@ const Task = ({ task }: { task: Task }) => {
                         {task.assignee && (
                             <div className='relative'>
                                 {showAssigneeUsername && (
-                                    <div className='absolute bottom-9 rounded-md px-2 py-1 z-50 -left-[90%] border bg-gray-50 border-gray-200 dark:bg-dark-bg dark:border-gray-800 dark:text-white'>
+                                    <div className='absolute bottom-9 rounded-md px-2 py-1 z-50 left-1/2 transform -translate-x-1/2 whitespace-nowrap border bg-gray-50 border-gray-200 dark:bg-dark-bg dark:border-gray-800 dark:text-white'>
                                         {task.assignee.username}
                                     </div>
                                 )}

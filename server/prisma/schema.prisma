@@ -13,45 +13,85 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum ProjectRole {
+  PROJECT_MANAGER
+  TEAM_LEAD
+  DEVELOPER
+  TESTER
+}
+
+enum WokspaceRole {
+  OWNER
+  CONTRIBUTOR
+}
+
 model User {
-  userId            Int     @id @default(autoincrement())
+  id                Int     @id @default(autoincrement())
+  email             String  @unique
   cognitoId         String  @unique
   username          String  @unique
   profilePictureUrl String?
-  teamId            Int?
 
-  authoredTasks Task[]       @relation("TaskAuthor")
-  assignedTasks Task[]       @relation("TaskAssignee")
-  attachments   Attachment[]
-  comments      Comment[]
-  team          Team?        @relation(fields: [teamId], references: [id])
+  worskapces     WorkspaceMembers[]
+  teams          Team[]
+  authoredTasks  Task[]             @relation("TaskAuthor")
+  assignedTasks  Task[]             @relation("TaskAssignee")
+  attachments    Attachment[]
+  comments       Comment[]
+  ProjectMembers ProjectMembers[]
 }
 
-model Team {
-  id                   Int           @id @default(autoincrement())
-  teamName             String
-  productOwnerUserId   Int?
-  projectManagerUserId Int?
-  projectTeams         ProjectTeam[]
-  user                 User[]
+model ProjectMembers {
+  userId    String
+  projectId Int
+  role      ProjectRole
+
+  project Project @relation(references: [id], fields: [projectId])
+  member  User    @relation(references: [email], fields: [userId])
+
+  @@id([userId, projectId])
+}
+
+model WorkspaceMembers {
+  userId      String
+  workspaceId Int
+  role        WokspaceRole
+
+  user     User      @relation(references: [email], fields: [userId])
+  wokspace Workspace @relation(references: [id], fields: [workspaceId])
+
+  @@id([userId, workspaceId])
+}
+
+model Workspace {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  projects Project[]
+  users    WorkspaceMembers[]
 }
 
 model Project {
-  id           Int           @id @default(autoincrement())
-  name         String
-  description  String?
-  startDate    DateTime?
-  endDate      DateTime?
-  tasks        Task[]
-  projectTeams ProjectTeam[]
+  id          Int     @id @default(autoincrement())
+  name        String
+  workspaceId Int
+  description String?
+  version     String
+  teams       Team[]
+  tasks       Task[]
+
+  workspace      Workspace        @relation(fields: [workspaceId], references: [id])
+  ProjectMembers ProjectMembers[]
 }
 
-model ProjectTeam {
-  id        Int     @id @default(autoincrement())
-  teamId    Int
+model Team {
+  id        Int    @id @default(autoincrement())
+  name      String
   projectId Int
-  team      Team    @relation(fields: [teamId], references: [id])
-  project   Project @relation(fields: [projectId], references: [id])
+
+  users   User[]
+  project Project @relation(references: [id], fields: [projectId])
+  Task    Task[]
 }
 
 model Task {
@@ -65,12 +105,14 @@ model Task {
   dueDate        DateTime?
   points         Int?
   projectId      Int
-  authorUserId   Int
-  assignedUserId Int?
+  teamId         Int?
+  authorUserId   String
+  assignedUserId String?
 
+  team        Team?        @relation(fields: [teamId], references: [id])
   project     Project      @relation(fields: [projectId], references: [id])
-  author      User         @relation("TaskAuthor", fields: [authorUserId], references: [userId])
-  assignee    User?        @relation("TaskAssignee", fields: [assignedUserId], references: [userId])
+  author      User         @relation("TaskAuthor", fields: [authorUserId], references: [email])
+  assignee    User?        @relation("TaskAssignee", fields: [assignedUserId], references: [email])
   attachments Attachment[]
   comments    Comment[]
 }
@@ -80,11 +122,11 @@ model Attachment {
   fileURL      String
   fileName     String?
   taskId       Int?
-  uploadedById Int
+  uploadedById String
   commentId    Int?
 
   task       Task?    @relation(fields: [taskId], references: [id])
-  uploadedBy User     @relation(fields: [uploadedById], references: [userId])
+  uploadedBy User     @relation(fields: [uploadedById], references: [email])
   comment    Comment? @relation(fields: [commentId], references: [id])
 }
 
@@ -92,9 +134,9 @@ model Comment {
   id          Int          @id @default(autoincrement())
   text        String
   taskId      Int
-  userId      Int
+  userId      String
   attachments Attachment[]
 
   task Task @relation(fields: [taskId], references: [id])
-  user User @relation(fields: [userId], references: [userId])
+  user User @relation(fields: [userId], references: [email])
 }

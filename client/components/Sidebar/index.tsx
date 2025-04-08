@@ -34,8 +34,8 @@ const Sidebar = () => {
     const [showProjects, setShowProjects] = useState<boolean>(false)
     const [showPriority, setShowPriority] = useState<boolean>(false)
 
-    const sidebarClass = `fixed flex flex-col h-[100%] justify-between shadow-xl transition-all  duration-300 h-full z-40
-        dark:bg-black overflow-y-auto bg-white ${isSidebarCollapsed ? "w-0 hidden" : "w-64"}
+    const sidebarClass = `fixed flex flex-col h-[100%] justify-between shadow-xl transition-all duration-300 h-full z-40
+        dark:bg-black bg-white ${isSidebarCollapsed ? "w-0 hidden" : "w-64"}
     `
 
   return (
@@ -43,7 +43,7 @@ const Sidebar = () => {
         <div className='flex h-[100%] w-full flex-col justify-start'>
             {/* TOP LOGO */}
             <div className="z-50 flex min-h-[56px] w-64 items-center justify-between bg-white px-6 pt-3 dark:bg-black">
-                <div className='text-xl font-bold text-gray-800 dark:text-white'>
+                <div className='text-xl font-bold text-blue-primary'>
                     Issue Tracker 2.0
                 </div>
                 {isSidebarCollapsed ? null : (
@@ -53,9 +53,8 @@ const Sidebar = () => {
                 )}
             </div>
 
-            {/* TEAM */}
+            {/* WORKSPACES */}
             <div className='flex items-center gap-5 border-y-[1.5px] border-gray-200 px-8 py-4 dark:border-gray-700'>
-                <Image src={"/kd.jpg"} width={64} height={64} alt='Logo'/>
                 <div>
                     <h3 className='text-md font-bold tracking-wide dark:text-gray-200'>KD Team</h3>
                     <div className="flex mt-1 items-start gap-2">
@@ -66,12 +65,12 @@ const Sidebar = () => {
             </div>
 
             {/* NAVBAR LINKS */}
-            <nav className='z-10 w-full overflow-x-hidden'>
+            <nav className='z-10 mt-2 w-full overflow-x-hidden'>
                 {SidebarLinksArr.map((link, ind) => <SidebarLink key={ind} icon={link.icon} label={link.label} href={link.href}/>)}
                 {/* PROJECTS LINKS */}
                 <button 
                     onClick={() => setShowProjects((prev) => !prev)} 
-                    className='flex w-full items-center justify-between px-7 py-3 text-gray-500'
+                    className='flex w-full items-center justify-between px-5 py-3 text-gray-500'
                 >
                     <span className=''>Projects</span>
                     <ChevronDown className={`h-5 w-5 transform-all duration-100 ${showProjects ? "-rotate-180" : "rotate-0"}`}/>
@@ -83,7 +82,7 @@ const Sidebar = () => {
                 {/* PRIORITY LINKS */}
                 <button 
                     onClick={() => setShowPriority((prev) => !prev)} 
-                    className='flex w-full items-center justify-between px-7 py-3 text-gray-500'
+                    className='flex w-full items-center justify-between px-5 py-3 text-gray-500'
                 >
                     <span className=''>Priority</span>
                     <ChevronDown className={`h-5 w-5 transform-all duration-100 ${showPriority ? "-rotate-180" : "rotate-0"}`}/>

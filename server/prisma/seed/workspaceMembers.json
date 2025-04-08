@@ -1,0 +1,12 @@
+[
+    {"userId": "iamkd30@gmail.com", "wokspaceId": 1, "role": "OWNER"},
+    {"userId": "iamkd30@gmail.com", "wokspaceId": 5, "role": "OWNER"},
+    {"userId": "manakhare5@gmail.com", "wokspaceId": 5, "role": "OWNER"},
+    {"userId": "manakhare5@gmail.com", "wokspaceId": 2, "role": "OWNER"},
+    {"userId": "chirag.sharma@gmail.com", "wokspaceId": 3, "role": "OWNER"},
+    {"userId": "aman.d@gmail.com", "wokspaceId": 4, "role": "OWNER"},
+    {"userId": "iamkd30@gmail.com", "wokspaceId": 6, "role": "CONTRIBUTOR"},
+    {"userId": "chirag.sharma@gmail.com", "wokspaceId": 6, "role": "CONTRIBUTOR"},
+    {"userId": "aman.d@gmail.com", "wokspaceId": 6, "role": "CONTRIBUTOR"},
+    {"userId": "manakhare5@gmail.com", "wokspaceId": 6, "role": "OWNER"}
+]

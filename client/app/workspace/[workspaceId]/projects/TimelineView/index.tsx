@@ -2,7 +2,7 @@ import { useAppSelector } from '@/app/StoreProvider';
 import { useGetAllTasksQuery, type Task } from '@/store/api';
 import { DisplayOption, Gantt, ViewMode } from "gantt-task-react";
 import { LoaderCircle } from 'lucide-react';
-import React, { useMemo, useState, type Dispatch, type SetStateAction } from 'react'
+import React, { useMemo, useState } from 'react'
 import "gantt-task-react/dist/index.css"
 
 type TimelineProps = {
@@ -23,7 +23,9 @@ const Timeline = ({ id }: TimelineProps) => {
 
     const gantTasks = useMemo(() => {
         return (
-            tasks?.map((task: Task) => ({
+            tasks
+            ?.filter(task => task.startDate && task.dueDate)
+            ?.map((task: Task) => ({
                 start: new Date(task?.startDate as string),
                 end: new Date(task?.dueDate as string),
                 name: task.title,

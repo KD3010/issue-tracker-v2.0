@@ -32,13 +32,13 @@ export const getProjectDetails = async (req: Request, res: Response): Promise<vo
 
 export const createProject = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { name, description, startDate, endDate } = req.body;
+        const { name, description, version, workspaceId } = req.body;
         const newProject = await prisma.project.create({
             data: {
                 name,
                 description,
-                startDate,
-                endDate
+                version,
+                workspaceId
             }
         })
 

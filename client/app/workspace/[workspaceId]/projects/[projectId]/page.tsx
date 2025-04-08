@@ -8,27 +8,27 @@ import TableView from '../TableView';
 
 type Props = {
     params: {
-        id: string
+        projectId: string
     }
 }
 
 const Projects = ({ params }: Props) => {
-    const { id } = params;
+    const { projectId } = params;
     const [activeTab, setActiveTab] = useState<string>("Board");
 
-    const { data: project, isLoading } = useGetProjectDetailsQuery({id: Number(id)});
+    const { data: project, isLoading } = useGetProjectDetailsQuery({id: Number(projectId)});
     
   return (
-    <div className='bg-white dark:bg-dark-bg'>
+    <div className='bg-gray-50 dark:bg-dark-bg'>
         {!isLoading && <ProjectHeader activeTab={activeTab} setActiveTab={setActiveTab} title={project?.name} />}
         {activeTab === "Board" && (
-          <BoardView id={id} />
+          <BoardView id={projectId} />
         )}
         {activeTab === "Table" && (
-          <TableView id={id} />
+          <TableView id={projectId} />
         )}
         {activeTab === "Timeline" && (
-          <Timeline id={id} />
+          <Timeline id={projectId} />
         )}
     </div>
   )

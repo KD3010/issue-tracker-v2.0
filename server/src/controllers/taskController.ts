@@ -50,9 +50,9 @@ export const createTask = async (req: Request, res: Response): Promise<void> => 
                 startDate, 
                 dueDate, 
                 points, 
-                authorUserId: Number(authorUserId), 
+                authorUserId: authorUserId, 
                 projectId, 
-                assignedUserId: Number(assignedUserId)
+                assignedUserId: assignedUserId
             }
         })
 

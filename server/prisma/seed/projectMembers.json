@@ -1,0 +1,13 @@
+[
+    { "userId": "iamkd30@gmail.com", "role": "PROJECT_MANAGER", "projectId": 1 },
+    { "userId": "iamkd30@gmail.com", "role": "TEAM_LEAD", "projectId": 2 },
+    { "userId": "manakhare5@gmail.com", "role": "PROJECT_MANAGER", "projectId": 2 },
+    { "userId": "chirag.sharma@gmail.com", "role": "PROJECT_MANAGER", "projectId": 3 },
+    { "userId": "aman.d@gmail.com", "role": "PROJECT_MANAGER", "projectId": 4 },
+    { "userId": "iamkd30@gmail.com", "role": "DEVELOPER", "projectId": 4 },
+    { "userId": "iamkd30@gmail.com", "role": "DEVELOPER", "projectId": 3 },
+    { "userId": "aman.d@gmail.com", "role": "TESTER", "projectId": 3 },
+    { "userId": "chirag.sharma@gmail.com", "role": "TESTER", "projectId": 4 },
+    { "userId": "manakhare5@gmail.com", "role": "TEAM_LEAD", "projectId": 3 },
+    { "userId": "manakhare5@gmail.com", "role": "TEAM_LEAD", "projectId": 4 }
+  ]
