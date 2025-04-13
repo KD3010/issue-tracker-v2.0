@@ -50,14 +50,15 @@ export const createTask = async (req: Request, res: Response): Promise<void> => 
                 startDate, 
                 dueDate, 
                 points, 
-                authorUserId: authorUserId, 
+                authorUserId, 
                 projectId, 
-                assignedUserId: assignedUserId
+                assignedUserId
             }
         })
 
         res.status(201).json(newTask)
     } catch (error: any) {
+        console.log(error.message)
         res.status(500).json({
             message: `Error creating the task: \n ${error.message}`
         })

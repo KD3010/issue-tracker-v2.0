@@ -1,9 +1,15 @@
 import { Request, Response } from "express";
 import prisma from "../utilities/db";
+import { asyncHandler } from "../utilities/asyncHandler";
 
-export const getAllProjects = async (_: Request, res: Response): Promise<void> => {
+export const getAllProjects = async (req: Request, res: Response): Promise<void> => {
+    const { workspace } = req.query;
     try {
-        const projects = await prisma.project.findMany();
+        const projects = await prisma.project.findMany({
+            where: {
+                workspaceId: Number(workspace)
+            }
+        });
 
         res.status(200).json(projects);
     } catch (error: any) {
@@ -13,22 +19,16 @@ export const getAllProjects = async (_: Request, res: Response): Promise<void> =
     }
 }
 
-export const getProjectDetails = async (req: Request, res: Response): Promise<void> => {
+export const getProjectDetails = asyncHandler(async (req: Request, res: Response) => {
     const { id } = req.params;
-    try {
-        const project = await prisma.project.findUnique({
-            where: {
-                id: Number(id),
-            }
-        })
+    const project = await prisma.project.findUnique({
+        where: {
+            id: Number(id),
+        }
+    })
 
-        res.status(200).json(project)
-    } catch (error: any) {
-        res.status(500).json({
-            message: `Error retreiving the project details \n ${error.message}`
-        });
-    }
-}
+    res.status(200).json(project)
+})
 
 export const createProject = async (req: Request, res: Response): Promise<void> => {
     try {

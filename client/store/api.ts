@@ -4,8 +4,8 @@ export interface Project {
     id: number,
     name: string,
     description?: string,
-    startDate?: string,
-    endDate?: string
+    version: string,
+    workspaceId: number
 }
 
 export interface User {
@@ -14,7 +14,6 @@ export interface User {
     email: string,
     profilePictureUrl?: string,
     cognitoId?: string,
-    teamId?: number
 }
 
 export interface Attachment {
@@ -45,6 +44,11 @@ export interface Task {
     attachments?: Attachment[],
 }
 
+export interface Workspace {
+    id: number,
+    name: string
+}
+
 export enum Status {
     ToDo = "To Do",
     InProgress = "In Progress",
@@ -63,14 +67,14 @@ export enum Priority {
 export const api = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL }),
     reducerPath: "api",
-    tagTypes: ["Projects", "Tasks"],
+    tagTypes: ["Projects", "Tasks", "Workspaces"],
     endpoints: (build) => ({
-        getAllProjects: build.query<Project[], void>({
-            query: () => "projects",
+        getAllProjects: build.query<Project[], { queries: String[] }>({
+            query: ({ queries }) => `projects?${queries.join(",")}`,
             providesTags: ["Projects"]
         }),
         getProjectDetails: build.query<Project, { id: number }>({
-            query: ({ id }) => `/projects/${id}`,
+            query: ({ id }) => `projects/${id}`,
             providesTags: ["Projects"]
         }),
         createProject: build.mutation<Project, Partial<Project>>({
@@ -89,7 +93,7 @@ export const api = createApi({
         }),
         createTask: build.mutation<Task, Partial<Task>>({
             query: (task) => ({
-                url: "tasks",
+                url: "task",
                 method: "POST",
                 body: task
             }),
@@ -102,6 +106,10 @@ export const api = createApi({
                 body: { status }
             }),
             invalidatesTags: (result, error, { taskId }) => [{type: "Tasks" as const, taskId}]
+        }),
+        getMyWorkspaces: build.query<Workspace[], { user: string }>({
+            query: ({ user }) => `workspaces?user=${user}`,
+            providesTags: ["Workspaces"]
         })
     })
 });
@@ -113,4 +121,5 @@ export const {
     useGetAllTasksQuery, 
     useCreateTaskMutation, 
     useUpdateTaskStatusMutation,
+    useGetMyWorkspacesQuery,
 } = api;

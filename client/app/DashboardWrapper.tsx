@@ -1,8 +1,11 @@
 "use client";
+// Since Navbar is mostly static with just dark mode and settings button which redirects to another page
 import Navbar from '@/components/Navbar'
-import Sidebar from '@/components/Sidebar'
-import React, { useEffect, type ReactNode } from 'react'
+import SidebarPlaceholder from '@/components/Sidebar/SidebarPlaceholder';
+import React, { Suspense, useEffect, type ReactNode } from 'react'
 import StoreProvider, { useAppSelector } from './StoreProvider'
+
+const Sidebar = React.lazy(() => import("@/components/Sidebar"));
 
 const DashboardLayout = ({ children }: { children: ReactNode }) => {
   const {isSidebarCollapsed, isDarkMode} = useAppSelector(state => state.global);
@@ -17,7 +20,9 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
 
   return (
     <div className='flex min-h-screen w-full bg-gray-50 text-gray-900'>
-        <Sidebar />
+        <Suspense fallback={<SidebarPlaceholder />}>
+          <Sidebar />
+        </Suspense>
         <main className={`flex w-full flex-col bg-gray-50 dark:bg-dark-bg 
             ${isSidebarCollapsed ? "" : "md:pl-64"}
           `}>

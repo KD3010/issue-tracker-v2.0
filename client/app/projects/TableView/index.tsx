@@ -1,8 +1,7 @@
 import { useAppSelector } from '@/app/StoreProvider';
-import Header from '@/components/Header';
 import { useGetAllTasksQuery } from '@/store/api';
 import { LoaderCircle } from 'lucide-react';
-import React, { type Dispatch, type SetStateAction } from 'react'
+import React from 'react'
 import { DataGrid, type GridColDef } from "@mui/x-data-grid"
 import { formatDate } from 'date-fns';
 import { dataGridClassNames, dataGridSxStyles } from '@/lib/utils';

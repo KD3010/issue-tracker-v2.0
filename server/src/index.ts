@@ -6,6 +6,7 @@ import helmet from "helmet";
 
 import projectRoutes from "./routes/projectRoutes";
 import taskRoutes from "./routes/taskRoutes";
+import workspaceRoutes from "./routes/workspaceRoutes";
 
 dotenv.config();
 const app = express();
@@ -23,6 +24,7 @@ app.get("/", (_, res) => {
 
 app.use("/api/v1/projects", projectRoutes)
 app.use("/api/v1/tasks", taskRoutes)
+app.use("/api/v1/workspaces", workspaceRoutes)
 
 const Port = process.env.PORT || 5000;
 app.listen(Port, () => {

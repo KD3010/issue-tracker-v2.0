@@ -1,5 +1,6 @@
 import Header from '@/components/Header';
-import { Clock, Filter, Search, Share2, StretchVertical, Table } from 'lucide-react';
+import ModalNewTask from '@/components/Modal/ModalNewTask';
+import { Clock, Filter, Plus, Search, Share2, StretchVertical, Table } from 'lucide-react';
 import React, { useState, type Dispatch, type SetStateAction } from 'react'
 
 type Props = {
@@ -9,11 +10,19 @@ type Props = {
 }
 
 const ProjectHeader = ({ activeTab, setActiveTab, title }: Props) => {
-    const [isModalNewProjectOpen, setIsModalNewProjectOpen] = useState<boolean>(false);
+    const [isModalNewTaskOpen, setIsModalNewTaskOpen] = useState<boolean>(false);
   return (
     <div className='px-4 xl:px-6'>
-        <div className='py-6 lg:pb-4 lg:pt-8'>
+        {isModalNewTaskOpen && <ModalNewTask isOpen={isModalNewTaskOpen} onClose={() => setIsModalNewTaskOpen(false)}/>}
+        <div className='py-6 lg:pb-4 lg:pt-8 flex items-center justify-between'>
             <Header title={title ? title : "Project Design Development"} />
+            <button 
+                onClick={() => setIsModalNewTaskOpen(!isModalNewTaskOpen)}
+                className='w-min flex flex-nowrap items-center justify-center gap-1 text-white rounded bg-blue-primary hover:bg-blue-600 pl-2 pr-3 py-2 transition-colors duration-200 ease-in-out'
+            >
+                <Plus className='h-5 w-5'/>
+                <p className='text-nowrap'>Create Task</p>
+            </button>
         </div>
 
         <div className='flex flex-wrap-reverse gap-2 border-y border-gray-200 pb-[8px] pt-2 dark:border-stroke-dark md:items-center'>

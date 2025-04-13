@@ -8,13 +8,13 @@ import TableView from '../TableView';
 
 type Props = {
     params: {
-        projectId: string
+      projectId: string
     }
 }
 
 const Projects = ({ params }: Props) => {
     const { projectId } = params;
-    const [activeTab, setActiveTab] = useState<string>("Board");
+    const [ activeTab, setActiveTab ] = useState<string>("Board");
 
     const { data: project, isLoading } = useGetProjectDetailsQuery({id: Number(projectId)});
     

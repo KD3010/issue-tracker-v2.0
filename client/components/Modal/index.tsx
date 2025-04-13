@@ -11,12 +11,9 @@ type Props = {
 }
 
 const Modal = ({ children, isOpen, onClose, name }: Props) => {
-
-    if(!isOpen) return null;
-
   return ReactDOM.createPortal(
     <div key={name} className='z-[100] fixed inset-0 h-full w-full overflow-y-auto flex items-center justify-center bg-gray-600 bg-opacity-50 p-4'>
-        <div className='w-full max-w-xl rounded-lg bg-white p-4 shadow-lg dark:bg-dark-secondary'>
+        <div className={`w-full max-w-xl rounded-lg bg-white p-4 shadow-lg dark:bg-dark-secondary animate-zoom_in`}>
             <Header title={name} buttonComponent={
                 <button 
                     className='flex h-7 w-7 items-center justify-center rounded-full bg-blue-primary text-white hover:bg-blue-600 '

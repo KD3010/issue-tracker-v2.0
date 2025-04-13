@@ -8,7 +8,26 @@ const config: Config = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    keyframes: {
+      wiggle: {
+        '0%, 100%': { transform: 'rotate(-3deg)' },
+        '50%': { transform: 'rotate(3deg)' },
+      },
+      zoom_in: {
+        '0%': { transform: 'scale(0)' },
+        '100%': { transform: 'scale(1)' },
+      },
+      pulse: {
+        '0%, 100%': {opacity: "0.5"},
+        '50%': { opacity: "1" },
+      }
+    },
     extend: {
+      animation: {
+        wiggle: 'wiggle 1s ease-in-out infinite',
+        zoom_in: 'zoom_in 300ms ease-in-out',
+        pulse: "pulse 2s ease-in-out infinite"
+      },
       colors: {
         white: "#ffffff",
         gray: {

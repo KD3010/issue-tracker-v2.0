@@ -1,109 +1,15 @@
-import { useGetAllTasksQuery, useUpdateTaskStatusMutation } from '@/store/api';
-import React, { useState, type Dispatch, type SetStateAction } from 'react'
-import { DndProvider, useDrag, useDrop } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import { type Task } from '@/store/api';
-import { EllipsisVertical, LoaderCircle, MessageSquareMore, AlertCircle, ShieldAlert, AlertTriangle, AlertOctagon, Layers3 } from 'lucide-react';
+import { AlertCircle, AlertOctagon, AlertTriangle, EllipsisVertical, Layers3, MessageSquareMore, ShieldAlert } from "lucide-react";
+import Image from "next/image";
+import { Task } from "@/store/api";
+import { useDrag } from "react-dnd";
+import { useState } from "react";
 import { format } from "date-fns";
-import Image from 'next/image';
 
-type BoardProps = {
-    id: string,
+type BoardItemProps = {
+    task: Task
 }
 
-const taskStatus = ["To Do", "In Progress", "Under Review", "Closed"];
-
-const BoardView = ({ id }: BoardProps) => {
-    const { data:  tasks, isLoading, error } = useGetAllTasksQuery({ projectId: Number(id) });
-    const [updateTaskStatus] = useUpdateTaskStatusMutation();
-
-    const moveTask = ( taskId: number, toStatus: string ) => {
-        updateTaskStatus({ taskId, status: toStatus })
-    }
-
-    if(isLoading) {
-        return <div className='w-full h-40 flex justify-center items-center'>
-            <LoaderCircle className='animate-spin text-gray-500 dark:text-neutral-500' size={40}/>
-        </div>
-    } else if (error) {
-        return <div className='flex w-full h-40 justify-center items-center text-lg'>
-            An error occured while fetching the tasks
-        </div>
-    }
-
-  return (
-    <DndProvider backend={HTML5Backend}>
-        <div className='grid grid-cols-1 gap-4 p-4 md:grid-cols-2 xl:grid-cols-4 min-h-[65vh]'>
-            {taskStatus.map((status) => (
-                <TaskColumn key={status} status={status} tasks={tasks || []} moveTask={moveTask} />
-            ))}
-        </div>
-    </DndProvider>
-  )
-}
-
-type TaskColumnProps = {
-    status: string,
-    tasks: Task[],
-    moveTask: (taskId: number, toStatus: string) => void,
-}
-
-const TaskColumn = ({status, tasks, moveTask, }: TaskColumnProps) => {
-    const [ { isOver }, drop ] = useDrop(() => ({
-        accept: "task",
-        drop: (item: { id: number }) => moveTask(item.id, status),
-        collect: (monitor: any) => ({
-                isOver: !!monitor.isOver()
-        })
-    }));
-
-    const taskCount = tasks.filter((task) => task.status === status).length;
-    const statusColor: any = {
-        "To Do": "#2563EB",
-        "In Progress": "#059669",
-        "Under Review": "#D97706",
-        "Closed": "#000000"
-    }
-
-    return (
-        <div ref={(instance) => {
-            drop(instance)
-        }}
-        className={`sm:py-4 rounded-lg py-2 xl:px-2 ${isOver ? "bg-blue-100 dark:bg-black" : ""}`}
-        >
-            <div className='mb-3 flex w-full shadow'>
-                <div className={`w-2 !bg-[${statusColor[status]}] rounded-s-lg`} style={{ backgroundColor: statusColor[status] }}/>
-                <div className='flex w-full items-center justify-between rounded-e-lg bg-white px-5 py-4 dark:bg-dark-secondary'>
-                    <h3 className='flex items-center text-lg  font-semibold dark:text-white'>
-                        {status}{" "}
-                        <span className='ml-2 inline-block rounded-full bg-gray-200 p-1 text-center text-sm leading-none dark:bg-dark-tertiary'
-                            style={{width: "1.5rem", height: "1.5rem"}}
-                        >
-                            {taskCount}
-                        </span>
-                    </h3>
-
-                    {/* <div className='flex items-center gap-1'>
-                        <button className='flex h-6 w-5 items-center justify-center dark:text-neutral-500'>
-                            <EllipsisVertical size={26} />
-                        </button>
-                        <button className='flex h-6 w-6 items-center justify-center rounded bg-gray-200 dark:bg-dark-tertiary dark:text-white'
-                            onClick={() => (true)}
-                        >
-                            <Plus size={16}/>
-                        </button>
-                    </div> */}
-                </div>
-            </div>
-
-            {tasks.filter((task) => task.status === status).map(task => (
-                <Task key={task.id} task={task} />
-            ))}
-        </div>
-    )
-}
-
-const Task = ({ task }: { task: Task }) => {
+const BoardItem = ({ task }: BoardItemProps) => {
     const [ { isDragging }, drag ] = useDrag(() => ({
         type: "task",
         item: { id: task.id },
@@ -149,16 +55,6 @@ const Task = ({ task }: { task: Task }) => {
                 isDragging ? "opacity-50" : "opacity-100"
             }`}
         >
-            {/* {task.attachments && task.attachments.length > 0 && (
-                <Image 
-                    src={`/${task.attachments[0].fileURL}`} 
-                    alt={task.attachments[0].fileName}
-                    width={400}
-                    height={200}
-                    className='h-auto w-full rounded-t-md'
-                />
-
-            )} */}
             <div className='p-4 md:p-6'>
                 <div className="flex items-center justify-between">
                     <div className="flex flex-1 wrap items-center gap-2">
@@ -180,7 +76,7 @@ const Task = ({ task }: { task: Task }) => {
                 </div>
 
                 <div className='my-3 flex justify-between'>
-                    <h4 className="text-md text-bold dark:text-white">{task.title}</h4>
+                    <h4 className="text-md text-bold dark:text-white truncate">{task.title}</h4>
                     {typeof task.points === "number" && (
                         <div className="text-xs font-semibold dark:text-white ">
                             {task.points} pts
@@ -255,4 +151,4 @@ const Task = ({ task }: { task: Task }) => {
     )
 }
 
-export default BoardView
+export default BoardItem;
