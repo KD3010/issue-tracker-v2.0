@@ -4,7 +4,7 @@ import prisma from "../utilities/db";
 export const getAllTasks = async (req: Request, res: Response): Promise<void> => {
     try {
         const { projectId } = req.query;
-        const tasks = await prisma.task.findMany({
+        const allTasks = await prisma.task.findMany({
             where: {
                 projectId: Number(projectId),
             },
@@ -12,9 +12,21 @@ export const getAllTasks = async (req: Request, res: Response): Promise<void> =>
                 author: true,
                 assignee: true,
                 comments: true,
-                attachments: true,                
+                attachments: true,
+                project: {
+                    select: {
+                        name: true
+                    }
+                }             
             }
         });
+
+        const tasks = allTasks.map((task) => ({
+            ...task,
+            taskId: task.project.name.split(" ").length > 1 ?
+            (task.project.name.split(" ").reduce((newVal, curVal) => newVal.charAt(0) + curVal.charAt(0), "")+"-"+task.id).toUpperCase() :
+            (task.project.name.split(" ").reduce((newVal, curVal) => newVal + curVal, "")+"-"+task.id)
+        }))
 
         res.status(200).json(tasks)
     } catch (error: any) {

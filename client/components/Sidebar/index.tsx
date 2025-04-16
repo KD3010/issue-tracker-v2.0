@@ -2,28 +2,27 @@
 import { useAppDispatch, useAppSelector } from '@/app/StoreProvider';
 import { setWorkspace, setIsSidebarCollapsed } from '@/store';
 import { useGetAllProjectsQuery, useGetMyWorkspacesQuery } from '@/store/api';
-import { Briefcase, ChevronDown, ChevronsUpDown, HomeIcon, LockIcon, Plus, Settings, TvMinimal, X, type LucideIcon } from 'lucide-react';
+import { Briefcase, ChartLine, ChartPie, ChevronDown, ChevronsUpDown, LockIcon, Plus, Settings, TvMinimal, X, type LucideIcon } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import React, { useMemo, useState } from 'react';
 import ModalNewProject from '../Modal/ModalNewProject';
 
 const SidebarLinksArr = [
-    { icon: HomeIcon, label: "Home", href: "/" },
-    { icon: Briefcase, label: "Project Timeline", href: "/timeline" },
+    { icon: ChartPie, label: "Dashboard", href: "/" },
+    { icon: ChartLine, label: "Analytics", href: "/analytics" },
     { icon: Settings, label: "Settings", href: "/settings" },
 ]
 
 const Sidebar = () => {
     const dispatch = useAppDispatch();
     const { isSidebarCollapsed, currentWorkspace } = useAppSelector((state) => state.global);
-    const router = useRouter();
 
     const { data: projects } = useGetAllProjectsQuery({queries: [`workspace=${currentWorkspace}`]});
     const { data: workspaces } = useGetMyWorkspacesQuery({ user: "iamkd30@gmail.com" });
 
-    const [showProjects, setShowProjects] = useState<boolean>(false)
-    const [showWorkspaces, setShowWorkspaces] = useState<boolean>(false);
+    const [showProjects, setShowProjects] = useState<boolean>(true)
+    const [showWorkspaces, setShowWorkspaces] = useState<boolean>(true);
     const [newProjectModalVisible, setNewProjectModalVisible] = useState<boolean>(false);
 
     const sidebarClass = `fixed flex flex-col justify-between shadow-xl h-full z-40
@@ -68,7 +67,6 @@ const Sidebar = () => {
                             key={ind}
                             onClick={() => {
                                 dispatch(setWorkspace(workspace.id));
-                                router.push("/")
                             }}
                             className={`relative flex cursor-pointer items-center gap-3 transition-colors hover:bg-gray-100 dark:bg-black dark:hover:bg-gray-700 justify-start w-full px-5 py-3`}
                         >

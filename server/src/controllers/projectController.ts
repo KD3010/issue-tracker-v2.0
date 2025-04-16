@@ -24,6 +24,14 @@ export const getProjectDetails = asyncHandler(async (req: Request, res: Response
     const project = await prisma.project.findUnique({
         where: {
             id: Number(id),
+        },
+        include: {
+            ProjectMembers: {
+                include: {
+                    member: true
+                }
+            },
+            teams: true
         }
     })
 

@@ -76,7 +76,7 @@ const BoardItem = ({ task }: BoardItemProps) => {
                 </div>
 
                 <div className='my-3 flex justify-between'>
-                    <h4 className="text-md text-bold dark:text-white truncate">{task.title}</h4>
+                    <h4 className="text-md text-bold dark:text-white truncate">{task.taskId}</h4>
                     {typeof task.points === "number" && (
                         <div className="text-xs font-semibold dark:text-white ">
                             {task.points} pts
@@ -90,7 +90,7 @@ const BoardItem = ({ task }: BoardItemProps) => {
                 </div>
 
                 <p className='text-sm text-gray-600 dark:text-neutral-500 truncate'>
-                    {task.description}
+                    {task.title}
                 </p>
 
                 <div className='mt-4 border-t border-gray-200 dark:border-stroke-dark' />

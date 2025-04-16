@@ -1,6 +1,6 @@
 import Header from '@/components/Header';
 import ModalNewTask from '@/components/Modal/ModalNewTask';
-import { Clock, Filter, Plus, Search, Share2, StretchVertical, Table } from 'lucide-react';
+import { Clock, Filter, NotebookTabs, Plus, Search, Share2, StretchVertical, Table } from 'lucide-react';
 import React, { useState, type Dispatch, type SetStateAction } from 'react'
 
 type Props = {
@@ -28,6 +28,7 @@ const ProjectHeader = ({ activeTab, setActiveTab, title }: Props) => {
         <div className='flex flex-wrap-reverse gap-2 border-y border-gray-200 pb-[8px] pt-2 dark:border-stroke-dark md:items-center'>
             <div className='flex flex-1 items-center gap-2 md:gap-4'>
                 <TabButton title='Board' icon={<StretchVertical className='h-5 w-5'/>} setActiveTab={setActiveTab} activeTab={activeTab} />
+                <TabButton title='Details' icon={<NotebookTabs className='h-5 w-5'/>} setActiveTab={setActiveTab} activeTab={activeTab} />
                 <TabButton title='Table' icon={<Table className='h-5 w-5'/>} setActiveTab={setActiveTab} activeTab={activeTab} />
                 <TabButton title='Timeline' icon={<Clock className='h-5 w-5'/>} setActiveTab={setActiveTab} activeTab={activeTab} />
             </div>

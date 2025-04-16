@@ -5,6 +5,7 @@ import React from 'react'
 import { DataGrid, type GridColDef } from "@mui/x-data-grid"
 import { formatDate } from 'date-fns';
 import { dataGridClassNames, dataGridSxStyles } from '@/lib/utils';
+import Link from 'next/link';
 
 type TableProps = {
     id: string,
@@ -12,13 +13,16 @@ type TableProps = {
 
 const columns: GridColDef[] = [
     {
-        field: "title",
-        headerName: "Summary",
-        width: 100
+        field: "taskId",
+        headerName: "ID",
+        width: 100,
+        renderCell: (params) => (
+            <Link className='text-blue-primary' href={`/tasks/${params.value}`}>{params.value}</Link>
+        ),
     },
     {
-        field: "description",
-        headerName: "Description",
+        field: "title",
+        headerName: "Title",
         width: 220
     },
     {
@@ -26,7 +30,7 @@ const columns: GridColDef[] = [
         headerName: "Status",
         width: 130,
         renderCell: (params) => (
-            <span className={`inline-flex rounded-full px-2 text-xs  font-semibold leading-5 
+            <span className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 
                 ${params.value === "To Do" ? 
                     "bg-red-200 text-red-700" : params.value === "Under Review" ?
                     "bg-yellow-200 text-yellow-700" : params.value === "Closed" ? 
@@ -88,7 +92,7 @@ const TableView = ({ id }: TableProps) => {
     }
 
   return (
-    <div className='h-[500px] w-full px-4 pb-8 xl:px-6'>
+    <div className='h-[450px] w-full px-4 pb-8 xl:px-6'>
         <DataGrid 
             pageSizeOptions={[10, 20, 50]}
             rows={tasks || []}

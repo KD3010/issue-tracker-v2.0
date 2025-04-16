@@ -5,7 +5,9 @@ export interface Project {
     name: string,
     description?: string,
     version: string,
-    workspaceId: number
+    workspaceId: number,
+    ProjectMembers: [],
+    teams: []
 }
 
 export interface User {
@@ -26,6 +28,7 @@ export interface Attachment {
 
 export interface Task {
     id: number,
+    taskId: string,
     title: string, 
     description?: string, 
     status?: Status, 
@@ -46,7 +49,8 @@ export interface Task {
 
 export interface Workspace {
     id: number,
-    name: string
+    name: string,
+    projects: Partial<Project>[]
 }
 
 export enum Status {

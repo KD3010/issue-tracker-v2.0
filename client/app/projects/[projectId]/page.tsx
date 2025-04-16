@@ -5,6 +5,7 @@ import BoardView from '../BoardView';
 import { useGetProjectDetailsQuery } from '@/store/api';
 import Timeline from '../TimelineView';
 import TableView from '../TableView';
+import DetailsView from '../DetailsView';
 
 type Props = {
     params: {
@@ -23,6 +24,9 @@ const Projects = ({ params }: Props) => {
         {!isLoading && <ProjectHeader activeTab={activeTab} setActiveTab={setActiveTab} title={project?.name} />}
         {activeTab === "Board" && (
           <BoardView id={projectId} />
+        )}
+        {activeTab === "Details" && (
+          <DetailsView id={projectId} />
         )}
         {activeTab === "Table" && (
           <TableView id={projectId} />

@@ -35,8 +35,8 @@ const BoardView = ({ id }: BoardProps) => {
     <DndProvider backend={HTML5Backend}>
         <div className='grid grid-cols-1 gap-4 p-4 md:grid-cols-2 xl:grid-cols-4 min-h-[65vh]'>
             {taskStatus.map((status) => (
-                <Suspense fallback={<BoardPlaceHolder />}>
-                    <BoardColumn key={status} status={status} tasks={tasks || []} moveTask={moveTask} />
+                <Suspense key={status} fallback={<BoardPlaceHolder />}>
+                    <BoardColumn status={status} tasks={tasks || []} moveTask={moveTask} />
                 </Suspense>
             ))}
         </div>

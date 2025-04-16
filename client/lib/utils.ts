@@ -30,3 +30,8 @@ export const dataGridSxStyles = (isDarkMode: boolean) => {
     },
   };
 };
+
+export const getRoleText = (role: string) => {
+  const formattedRole = role.split("_").map((val) => val.toLowerCase().charAt(0).toUpperCase() + val.toLowerCase().substring(1)).join(" ");
+  return formattedRole
+}

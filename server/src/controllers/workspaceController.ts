@@ -13,6 +13,9 @@ export const getMyWorkspaces = asyncHandler(async (req: Request, res: Response) 
                     }
                 }
             }
+        }, 
+        include: {
+            projects: true
         }
     })
 

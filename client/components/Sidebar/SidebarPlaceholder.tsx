@@ -1,11 +1,8 @@
-import { useAppSelector } from '@/app/StoreProvider'
-import { Skeleton } from '@mui/material'
 import React from 'react'
 
 const sidebarClass = `fixed flex flex-col h-[100%] shadow-xl h-full z-40 dark:bg-black bg-white w-64`
 
 const SidebarPlaceholder = () => {
-    const isDarkMode = useAppSelector((state) => state.global)
     return (
         <div className={sidebarClass}>
             {/* TOP LOGO */}
